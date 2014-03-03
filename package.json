@@ -1,0 +1,26 @@
+{
+  "name": "ezRPG",
+  "version": "0.0.0",
+  "description": "Elie's RPG code test.",
+  "main": "web.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:prisonerjohn/ezRPG.git"
+  },
+  "keywords": [
+    "rpg"
+  ],
+  "author": "prisonerjohn",
+  "license": "GPL v2",
+  "bugs": {
+    "url": "https://github.com/prisonerjohn/ezRPG/issues"
+  },
+  "homepage": "https://github.com/prisonerjohn/ezRPG",
+  "dependencies": {
+    "logfmt": "^0.21.0",
+    "express": "^3.4.8"
+  }
+}
