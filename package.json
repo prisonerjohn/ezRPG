@@ -21,6 +21,7 @@
   "homepage": "https://github.com/prisonerjohn/ezRPG",
   "dependencies": {
     "logfmt": "^0.21.0",
-    "express": "^3.4.8"
+    "express": "^3.4.8",
+    "mongodb": "^1.3.23"
   }
 }
