@@ -1,2 +1,2 @@
-ezRPG
-=====
+ezRPG-Server
+============

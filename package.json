@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:prisonerjohn/ezRPG.git"
+    "url": "git@github.com:prisonerjohn/ezRPG-Server.git"
   },
   "keywords": [
     "rpg"
@@ -16,9 +16,9 @@
   "author": "prisonerjohn",
   "license": "GPL v2",
   "bugs": {
-    "url": "https://github.com/prisonerjohn/ezRPG/issues"
+    "url": "https://github.com/prisonerjohn/ezRPG-Server/issues"
   },
-  "homepage": "https://github.com/prisonerjohn/ezRPG",
+  "homepage": "https://github.com/prisonerjohn/ezRPG-Server",
   "dependencies": {
     "logfmt": "^0.21.0",
     "express": "^3.4.8",
