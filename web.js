@@ -90,7 +90,9 @@ app.put('/token/:id', function(req, res) {
 				res.send(409, err);
 			}
 			else {
-				res.send('ok');
+				var ok = new Object();
+				ok.result = 'ok';
+				res.send(ok);
 			}
 		});
 	}
@@ -103,7 +105,9 @@ app.delete('/token/:id', function(req, res) {
 			res.send(409, err);
 		}
 		else {
-			res.send('ok');
+			var ok = new Object();
+			ok.result = 'ok';
+			res.send(ok);
 		}
 	});
 });
