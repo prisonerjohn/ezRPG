@@ -1,3 +1,5 @@
+process.env.PWD = process.cwd();
+
 var express = require('express');
 var logfmt = require('logfmt');
 var util = require('util');
@@ -5,7 +7,7 @@ var util = require('util');
 var Db = require('mongodb').Db,
 	ObjectID = require('mongodb').ObjectID;
 	
-var TokenProvider = require('./tokenProvider.js').TokenProvider,
+var TokenProvider = require(express.static(process.env.PWD + '/tokenProvider')).TokenProvider,
 	QuestionProvider = require('./questionProvider.js').QuestionProvider,
 	ScoreProvider = require('./scoreProvider.js').ScoreProvider;
 
