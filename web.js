@@ -7,7 +7,7 @@ var util = require('util');
 var Db = require('mongodb').Db,
 	ObjectID = require('mongodb').ObjectID;
 	
-var TokenProvider = require(process.env.PWD + '/tokenProvider').TokenProvider,
+var TokenProvider = require('./tokenprovider').TokenProvider,
 	QuestionProvider = require('./questionProvider.js').QuestionProvider,
 	ScoreProvider = require('./scoreProvider.js').ScoreProvider;
 
