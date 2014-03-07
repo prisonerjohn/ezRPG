@@ -6,7 +6,8 @@ var Db = require('mongodb').Db,
 	ObjectID = require('mongodb').ObjectID;
 	
 var TokenProvider = require('./tokenProvider').TokenProvider,
-	QuestionProvider = require('./questionProvider').QuestionProvider;
+	QuestionProvider = require('./questionProvider').QuestionProvider,
+	ScoreProvider = require('./scoreProvider').ScoreProvider;
 
 var mongoUri = process.env.MONGOLAB_URI || process.env.MONGOHQ_URL || 'mongodb://localhost/mydb';
 
@@ -28,6 +29,7 @@ app.configure(function() {
 
 var tokenProvider = new TokenProvider();
 var questionProvider = new QuestionProvider();
+var scoreProvider = new ScoreProvider();
 
 app.get('/', function(req, res) {
   res.send('Hello World!');
@@ -192,6 +194,85 @@ app.delete('/question/:id', function(req, res) {
 		}
 	});
 });
+
+// score routes
+
+app.get('/scores', function(req, res) {
+	scoreProvider.findAll(db, function(err, scores) {
+		if (err) return console.error(err);
+		
+		res.send(scores);
+	});
+});
+
+app.put('/scores', function(req, res) {
+	// add the IDs to each tuple
+	var scores = req.body.scores;
+	var allErr;
+	for (var i = 0; i < scores.length; i++) {
+		if (scores[i]._id) {
+			scores[i]._id = ObjectID.createFromHexString(scores[i]._id);
+		}
+		scoreProvider.save(db, scores[i], function(err, docs) {
+			if (err) {
+				allErr = err;
+			}
+		});
+	}
+	if (allErr) {
+		console.error(allErr);
+		res.send(409, allErr);
+	}
+	else {
+		var ok = new Object();
+		ok.result = 'ok';
+		res.send(ok);
+	}
+});
+
+app.get('/scores/q/:id', function(req, res) {
+	scoreProvider.findForQuestion(db, req.params.id, function(err, scores) {
+		if (err) return console.error(err);
+		
+		res.send(scores);
+	});
+});
+
+app.get('/scores/t/:id', function(req, res) {
+	console.log('getting scores for token ' + req.params.id);
+	scoreProvider.findForToken(db, req.params.id, function(err, scores) {
+		if (err) return console.error(err);
+		
+		res.send(scores);
+	});
+});
+
+app.get('/score/:id', function(req, res) {
+	scoreProvider.find(db, ObjectID.createFromHexString(req.params.id), function(err, record) {
+		if (err) {
+			console.error(err);
+			res.send(409, err);
+		}
+		else {
+			res.send(record);
+		}
+	});
+});
+
+app.delete('/score/:id', function(req, res) {
+	scoreProvider.remove(db, ObjectID.createFromHexString(req.params.id), function(err, numRemoved) {
+		if (err) {
+			console.error(err);
+			res.send(409, err);
+		}
+		else {
+			var ok = new Object();
+			ok.result = 'ok';
+			res.send(ok);
+		}
+	});
+});
+
 // start the show
 
 var port = Number(process.env.PORT || 5000);
