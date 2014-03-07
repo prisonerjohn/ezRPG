@@ -102,16 +102,20 @@ app.put('/token/:id', function(req, res) {
 });
 
 app.delete('/token/:id', function(req, res) {
-	tokenProvider.remove(db, ObjectID.createFromHexString(req.params.id), function(err, numRemoved) {
-		if (err) {
-			console.error(err);
-			res.send(409, err);
-		}
-		else {
-			var ok = new Object();
-			ok.result = 'ok';
-			res.send(ok);
-		}
+	var tId = req.params.id;
+	scoreProvider.removeForToken(db, tId, function(err, numRemoved) {
+		console.log('Removed ' + numRemoved + ' scores');
+		tokenProvider.remove(db, ObjectID.createFromHexString(tId), function(err, numRemoved) {
+			if (err) {
+				console.error(err);
+				res.send(409, err);
+			}
+			else {
+				var ok = new Object();
+				ok.result = 'ok';
+				res.send(ok);
+			}
+		});
 	});
 });
 
@@ -182,16 +186,20 @@ app.put('/question/:id', function(req, res) {
 });
 
 app.delete('/question/:id', function(req, res) {
-	questionProvider.remove(db, ObjectID.createFromHexString(req.params.id), function(err, numRemoved) {
-		if (err) {
-			console.error(err);
-			res.send(409, err);
-		}
-		else {
-			var ok = new Object();
-			ok.result = 'ok';
-			res.send(ok);
-		}
+	var qId = req.params.id;
+	scoreProvider.removeForQuestion(db, qId, function(err, numRemoved) {
+		console.log('Removed ' + numRemoved + ' scores');
+		questionProvider.remove(db, ObjectID.createFromHexString(qId), function(err, numRemoved) {
+			if (err) {
+				console.error(err);
+				res.send(409, err);
+			}
+			else {
+				var ok = new Object();
+				ok.result = 'ok';
+				res.send(ok);
+			}
+		});
 	});
 });
 
