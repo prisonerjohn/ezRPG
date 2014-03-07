@@ -5,7 +5,8 @@ var util = require('util');
 var Db = require('mongodb').Db,
 	ObjectID = require('mongodb').ObjectID;
 	
-var TokenProvider = require('./tokenprovider').TokenProvider;
+var TokenProvider = require('./tokenProvider').TokenProvider,
+	QuestionProvider = require('./questionProvider').QuestionProvider;
 
 var mongoUri = process.env.MONGOLAB_URI || process.env.MONGOHQ_URL || 'mongodb://localhost/mydb';
 
@@ -26,13 +27,14 @@ app.configure(function() {
 });
 
 var tokenProvider = new TokenProvider();
-
-// routes
+var questionProvider = new QuestionProvider();
 
 app.get('/', function(req, res) {
   res.send('Hello World!');
   //res.send(mongoUri);
 });
+
+// token routes
 
 app.get('/tokens', function(req, res) {
 	tokenProvider.findAll(db, function(err, tokens) {
@@ -83,7 +85,6 @@ app.put('/token/:id', function(req, res) {
 		var token = new Object();
 		token._id = ObjectID.createFromHexString(req.params.id);
 		token.name = req.body.name;
-		console.log(util.inspect(token));
 		tokenProvider.update(db, token, function(err, result) {
 			if (err) {
 				console.error(err);
@@ -112,6 +113,85 @@ app.delete('/token/:id', function(req, res) {
 	});
 });
 
+// question routes
+
+app.get('/questions', function(req, res) {
+	questionProvider.findAll(db, function(err, questions) {
+		if (err) return console.error(err);
+		
+		res.send(questions);
+	});
+});
+
+app.post('/question/new', function(req, res) {
+	if (!req.body.name) {
+		var err = 'No "name" key in data!';
+		console.error(err);
+		res.send(400, err);
+	}
+	else {
+		questionProvider.save(db, req.body, function(err, docs) {
+			if (err) {
+				console.error(err);
+				res.send(409, err);
+			}
+			else {
+				res.send(docs);
+			}		
+		});
+	}
+});
+
+app.get('/question/:id', function(req, res) {
+	questionProvider.find(db, ObjectID.createFromHexString(req.params.id), function(err, record) {
+		if (err) {
+			console.error(err);
+			res.send(409, err);
+		}
+		else {
+			res.send(record);
+		}
+	});
+});
+
+app.put('/question/:id', function(req, res) {
+	if (!req.body.name) {
+		var err = 'No "name" key in data!';
+		console.error(err);
+		res.send(400, err);
+	}
+	else {
+		var question = new Object();
+		question._id = ObjectID.createFromHexString(req.params.id);
+		question.name = req.body.name;
+		//console.log(util.inspect(question));
+		questionProvider.update(db, question, function(err, result) {
+			if (err) {
+				console.error(err);
+				res.send(409, err);
+			}
+			else {
+				var ok = new Object();
+				ok.result = 'ok';
+				res.send(ok);
+			}
+		});
+	}
+});
+
+app.delete('/question/:id', function(req, res) {
+	questionProvider.remove(db, ObjectID.createFromHexString(req.params.id), function(err, numRemoved) {
+		if (err) {
+			console.error(err);
+			res.send(409, err);
+		}
+		else {
+			var ok = new Object();
+			ok.result = 'ok';
+			res.send(ok);
+		}
+	});
+});
 // start the show
 
 var port = Number(process.env.PORT || 5000);
