@@ -5,9 +5,9 @@ var util = require('util');
 var Db = require('mongodb').Db,
 	ObjectID = require('mongodb').ObjectID;
 	
-var TokenProvider = require('./tokenProvider').TokenProvider,
-	QuestionProvider = require('./questionProvider').QuestionProvider,
-	ScoreProvider = require('./scoreProvider').ScoreProvider;
+var TokenProvider = require('./tokenProvider.js').TokenProvider,
+	QuestionProvider = require('./questionProvider.js').QuestionProvider,
+	ScoreProvider = require('./scoreProvider.js').ScoreProvider;
 
 var mongoUri = process.env.MONGOLAB_URI || process.env.MONGOHQ_URL || 'mongodb://localhost/mydb';
 
